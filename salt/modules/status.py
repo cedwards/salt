@@ -11,6 +11,10 @@ import fnmatch
 # Import salt libs
 import salt.utils
 
+if os.path.exists('/proc'):
+    PROCDIR = "/proc"
+elif os.path.exists('/usr/compat/linux/proc'):
+    PROCDIR = "/usr/compat/linux/proc"
 
 __opts__ = {}
 
@@ -124,7 +128,7 @@ def loadavg():
 
         salt '*' status.loadavg
     '''
-    procf = '/proc/loadavg'
+    procf = PROCDIR + '/loadavg'
     if not os.path.isfile(procf):
         return {}
     comps = salt.utils.fopen(procf, 'r').read().strip()
@@ -142,7 +146,7 @@ def cpustats():
 
         salt '*' status.cpustats
     '''
-    procf = '/proc/stat'
+    procf = PROCDIR + '/stat'
     if not os.path.isfile(procf):
         return {}
     stats = salt.utils.fopen(procf, 'r').read().splitlines()
@@ -179,7 +183,7 @@ def meminfo():
 
         salt '*' status.meminfo
     '''
-    procf = '/proc/meminfo'
+    procf = PROCDIR + '/meminfo'
     if not os.path.isfile(procf):
         return {}
     stats = salt.utils.fopen(procf, 'r').read().splitlines()
@@ -205,7 +209,7 @@ def cpuinfo():
 
         salt '*' status.cpuinfo
     '''
-    procf = '/proc/cpuinfo'
+    procf = PROCDIR + '/cpuinfo'
     if not os.path.isfile(procf):
         return {}
     stats = salt.utils.fopen(procf, 'r').read().splitlines()
@@ -230,7 +234,7 @@ def diskstats():
 
         salt '*' status.diskstats
     '''
-    procf = '/proc/diskstats'
+    procf = PROCDIR + '/diskstats'
     if not os.path.isfile(procf):
         return {}
     stats = salt.utils.fopen(procf, 'r').read().splitlines()
@@ -271,7 +275,7 @@ def diskusage(*args):
         salt '*' status.diskusage ext?    # usage for ext[234] filesystems
         salt '*' status.diskusage / ext?  # usage for / and all ext filesystems
     '''
-    procf = '/proc/mounts'
+    procf = PROCDIR + '/mounts'
     if not os.path.isfile(procf):
         return {}
     selected = set()
@@ -323,7 +327,7 @@ def vmstats():
 
         salt '*' status.vmstats
     '''
-    procf = '/proc/vmstat'
+    procf = PROCDIR + '/vmstat'
     if not os.path.isfile(procf):
         return {}
     stats = salt.utils.fopen(procf, 'r').read().splitlines()
@@ -344,7 +348,7 @@ def netstats():
 
         salt '*' status.netstats
     '''
-    procf = '/proc/net/netstat'
+    procf = PROCDIR + '/net/netstat'
     if not os.path.isfile(procf):
         return {}
     stats = salt.utils.fopen(procf, 'r').read().splitlines()
@@ -377,7 +381,7 @@ def netdev():
 
         salt '*' status.netdev
     '''
-    procf = '/proc/net/dev'
+    procf = PROCDIR + '/net/dev'
     if not os.path.isfile(procf):
         return {}
     stats = salt.utils.fopen(procf, 'r').read().splitlines()
